@@ -70,6 +70,7 @@ def test_hello(want_status_code, want_body):
       [
           ({"name":"used iPhone 16e", "category":"phone"}, 200),
           ({"name":"", "category":"phone"}, 400),
+          ({"name":"used iPhone 16e", "category":""}, 400),
       ],
   )
 def test_add_item_e2e(args,want_status_code,db_connection):
@@ -87,8 +88,15 @@ def test_add_item_e2e(args,want_status_code,db_connection):
 
     #Check if the data was saved to the database correctly
       cursor = db_connection.cursor()
-      cursor.execute("SELECT * FROM items WHERE name = ?", (args["name"],))
+      cursor.execute("""
+     SELECT items.name, categories.name as category, items.image_name
+       FROM items
+       JOIN categories ON items.category_id = categories.id
+      WHERE items.name = ?
+ """, (args["name"],))
+      
       db_item = cursor.fetchone()
 
       assert db_item is not None
       assert dict(db_item)["name"] == args["name"]
+      assert dict(db_item)["category"] == args["category"]

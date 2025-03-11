@@ -40,13 +40,13 @@
   color: black;
   padding: 16px;
   text-align: center;
-}
 
-.ItemList img {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-  border-radius: 10px;
+  > img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 10px;
+  }
 }
 
 .App-link {

@@ -1,38 +1,52 @@
 .App {
   text-align: center;
+
 }
 
 .Title {
-  background-color: #222427;
-  min-height: 8vh;
+  background-color: #ec4a26;
+  height: 15vh;
+  width: 100vh;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: left;
-  font-size: calc(10px + 1vmin);
+  align-items: center; 
+  justify-content: center; 
+  font-size: 40px;
   color: white;
+  text-align: center;
 }
 
 .Listing {
-  background-color: #222427;
-  min-height: 8vh;
+  background-color: #f0846f;
+  height: 10vh;
+  width: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: left;
-  font-size: calc(10px + 1vmin);
+  justify-content: center;
+  font-size: calc(12px + 1vmin);
   color: white;
 }
 
+.ItemListContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  padding: 18px;
+  justify-content: center;
+}
+
 .ItemList {
-  background-color: #222427;
-  min-height: 8vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: left;
-  font-size: calc(10px + 1vmin);
-  color: white;
+  background-color: rgb(247, 169, 169);
+  color: black;
+  padding: 16px;
+  text-align: center;
+}
+
+.ItemList img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 10px;
 }
 
 .App-link {

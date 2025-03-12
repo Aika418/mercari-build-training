@@ -66,6 +66,19 @@ def hello():
 class AddItemResponse(BaseModel):
     message: str
 
+@app.get("/search")
+def get_items(
+    keyword:str = Query(...),
+    db: sqlite3.Connection = Depends(get_db)
+):
+    cursor = db.cursor()
+    cursor.execute("SELECT items.id, items.name, categories.name AS category, items.image_name "
+    "FROM items JOIN categories ON items.category_id = categories.id "
+    "WHERE items.name LIKE ?",
+    (f"%{keyword}%",))
+    items = cursor.fetchall()
+    return {"items": [dict(item) for item in items]}
+
 @app.get("/items")
 def get_items(db: sqlite3.Connection = Depends(get_db)):
     cursor = db.cursor()
@@ -73,25 +86,15 @@ def get_items(db: sqlite3.Connection = Depends(get_db)):
     items = cursor.fetchall()
     return {"items": [dict(item) for item in items]}
 
-@app.get("/search")
-def get_items(
-    keyword:str = Query(...),
-    db: sqlite3.Connection = Depends(get_db)
-):
-    cursor = db.cursor()
-    cursor.execute("SELECT id, name, category, image_name FROM items WHERE name LIKE ?",
-        (f"%{keyword}%",))
-    items = cursor.fetchall()
-    return {"items": [dict(item) for item in items]}
-
-
-
 @app.get("/items/{item_id}") #4-5
-def get_items_by_id(item_id: int):
-    with open('items.json', 'r') as json_open:
-        json_load = json.load(json_open)
-    item = json_load["items"][item_id]
-    return item
+def get_items_by_id(item_id: int, db: sqlite3.Connection = Depends(get_db)):
+    cursor = db.cursor()
+    cursor.execute(
+        "SELECT items.id, items.name, categories.name AS category, items.image_name FROM items JOIN categories ON items.category_id = categories.id WHERE items.id = ?",
+        (item_id,),
+    )
+    item = cursor.fetchone()
+    return dict(item)
 
 
 # add_item is a handler to add a new item for POST /items .
